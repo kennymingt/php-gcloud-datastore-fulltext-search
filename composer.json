@@ -1,0 +1,14 @@
+{
+    "name": "kenny/full-text-search",
+    "description": "fulltext search engine and index creator for google cloud datastore",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Kent Tang Charlo",
+            "email": "kennymingt@gmail.com"
+        }
+    ],
+    "require": {
+        "google/cloud-datastore": "^1.9"
+    }
+}
