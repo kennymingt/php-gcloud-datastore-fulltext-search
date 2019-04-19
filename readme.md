@@ -1,7 +1,7 @@
 # PHP google datastore full-text search
 
 Three functions
-* parseString - returns an array with keywords extracted from a string
+* extractKeywords - returns an array with keywords extracted from a string
 * index - save a list of keywords into datastore
 * searchByKeywords - gets a keyword list and returns an array with Ids. from datastore
 
@@ -30,4 +30,11 @@ As April 2019.
 The query costs a 1 Entity read.
 
 The keys cost as small operation.
+
+
+# TODO: Things I want to include
+* Some kind of ranking for each entity. Probably a counter or score, it can be used for most seen posts or best rated products.
+* Some sorting of the keys returned. By creation date?
+* Remove plurals from keywords. ?
+* When searching by more than one keyword, if there are not enough results, search also by single keywords.
 
