@@ -29,6 +29,11 @@ function index($ds, $key, $keywords) {
 
 }
 
+
+/**
+ * @param String[]      $keywords   list of keywords to search
+ * @return  String[]    Array with Ids
+ */
 function searchByKeywords($keywords){
     $ds = new DatastoreClient();
 
