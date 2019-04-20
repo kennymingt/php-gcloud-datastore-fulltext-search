@@ -12,11 +12,11 @@ function loadValues()
 {
 
     // load a list of keywords from a file, It will be used as a list of words to omit from keywords
-    $filename = __DIR__ . "/../data/omit.txt";
+    $filename = __DIR__ . "/data/omit.txt";
     $omitString = file_get_contents($filename);
     $omit = \keywordEngine\extractKeywords($omitString);
 
-    $filename = __DIR__ . "/../data/pluralsEs.json";
+    $filename = __DIR__ . "/data/pluralsEs.json";
     $pluralsContent = file_get_contents($filename);
 
     $pluralsEs = json_decode($pluralsContent, true);
