@@ -1,6 +1,13 @@
 # PHP google datastore full-text search
 
-Three functions
+MTF - Main Three Functions
+* indexEntity - saves into the index db
+* seachIndex - query the db and returns matching keys
+* deleteIndex - delete an index entity
+
+OTF - OLD Three Functions
+
+They are still there somewhere
 * extractKeywords - returns an array with keywords extracted from a string
 * index - save a list of keywords into datastore
 * searchByKeywords - gets a keyword list and returns an array with Ids. from datastore
