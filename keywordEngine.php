@@ -41,14 +41,14 @@ function indexEntity($tr, $key, $string)
  * @param string[] $keywords List of keywords
  * @return void
  */
-function index($ds, $key, $keywords)
+function index($tr, $key, $keywords)
 {
-    // $ds =new DatastoreClient();
+    $ds =new DatastoreClient();
     $entityId = $key->pathEndIdentifier();
     $keywordKey = $ds->key("keywordIndex", $entityId)->ancestorKey($key);
 
     // find it in the database
-    $keywordEntity = $ds->lookup($keywordKey);
+    $keywordEntity = $tr->lookup($keywordKey);
 
     if ($keywordEntity == null) {
         $keywordEntity = $ds->entity($keywordKey);
@@ -56,7 +56,7 @@ function index($ds, $key, $keywords)
 
     $keywordEntity["list"] = $keywords;
 
-    $ds->upsert($keywordEntity);
+    $tr->upsert($keywordEntity);
 }
 
 
