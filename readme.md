@@ -1,4 +1,4 @@
-# PHP google datastore full-text search
+# PHP google datastore full-text search 
 
 MTF - Main Three Functions
 * indexEntity - saves into the index db
