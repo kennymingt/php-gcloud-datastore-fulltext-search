@@ -57,15 +57,25 @@ $productKeys = [
     $ds->key("product", "myKey7"),
 ];
 
+$meta = [
+    ["created" => new \DateTime(), "score" => 0,  "views" => 10, "ranking" => 50 ],
+    ["created" => new \DateTime(), "score" => 20,  "views" => 20, "ranking" => 40 ],
+    ["created" => new \DateTime(), "score" => 40, "views" => 40, "ranking" => 20 ],
+    ["created" => new \DateTime(), "score" => 50, "views" => 90, "ranking" => 60 ],
+    ["created" => new \DateTime(), "score" => 70, "views" => 40, "ranking" => 80 ],
+    ["created" => new \DateTime(), "score" => 20, "views" => 30, "ranking" => 70 ],
+    ["created" => new \DateTime(), "score" => 10, "views" => 90, "ranking" => 40 ],
+    ["created" => new \DateTime(), "score" => 70, "views" => 20, "ranking" => 50 ],
+    ["created" => new \DateTime(), "score" => 80, "views" => 10, "ranking" => 80 ],
+];
 
 // index a title
 // itshould insert the keywords in the database with the parentKey
 $tr = $ds->transaction();
 foreach ($strings as $i => $string) {
-    \keywordEngine\indexEntity($tr, $productKeys[$i], $string);
+    \keywordEngine\indexEntity($tr, $productKeys[$i], $string, $meta[$i]);
 }
 $tr->commit();
-
 
 // search the index
 // should return an array of keys for the recods containin the keywords
@@ -80,7 +90,7 @@ $search = [
 ];
 foreach ($search as $queryString ) {
     echo "searching for: $queryString";
-    $result = \keywordEngine\searchIndex($queryString);
+    $result = \keywordEngine\searchIndex($queryString, "score");
     var_dump($result);
 }
 

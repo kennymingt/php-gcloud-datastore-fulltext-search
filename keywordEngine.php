@@ -3,7 +3,9 @@ namespace keywordEngine;
 
 use Google\Cloud\Datastore\DatastoreClient;
 use Google\Cloud\Datastore\Transaction;
-use Google\cloud\Datastore\Key;
+use Google\Cloud\Datastore\Key;
+use Google\Cloud\Datastore\Query\Query;
+
 
 require __DIR__ . "/parseString.php";
 
@@ -15,7 +17,7 @@ require __DIR__ . "/parseString.php";
  * @param string $string string to index
  * @return void
  */
-function indexEntity($tr, $key, $string)
+function indexEntity($tr, $key, $string, $meta = null)
 {
 
     // Load list of words to omit whil extracting keywords
@@ -28,7 +30,7 @@ function indexEntity($tr, $key, $string)
     $keywords = \keywordEngine\extractKeywords($string, $omit);
     $keywords = \keywordEngine\removePlural($keywords, $pluralsEs);
 
-    \keywordEngine\index($tr, $key, $keywords);
+    \keywordEngine\index($tr, $key, $keywords, $meta);
 }
 
 
@@ -41,7 +43,7 @@ function indexEntity($tr, $key, $string)
  * @param string[] $keywords List of keywords
  * @return void
  */
-function index($tr, $key, $keywords)
+function index($tr, $key, $keywords, $meta)
 {
     $ds =new DatastoreClient();
     $entityId = $key->pathEndIdentifier();
@@ -56,6 +58,13 @@ function index($tr, $key, $keywords)
 
     $keywordEntity["list"] = $keywords;
 
+    // add metadata
+    if (is_array($meta)) {
+        foreach ($meta as $key => $value) {
+            $keywordEntity[$key] = $value;
+        }
+    }
+
     $tr->upsert($keywordEntity);
 }
 
@@ -68,7 +77,7 @@ function index($tr, $key, $keywords)
  * @param string $search
  * @return Key[] returns the Id of the matching entities
  */
-function searchIndex($search)
+function searchIndex($search, $orderField)
 {
     // Load list of words to omit whil extracting keywords
     // Also load the list of plurals rules
@@ -80,8 +89,7 @@ function searchIndex($search)
     $searchKeywords = \keywordEngine\extractKeywords($search, $omit);
     $searchKeywords = \keywordEngine\removePlural($searchKeywords, $pluralsEs);
 
-
-    $keys = \keywordEngine\searchByKeywords($searchKeywords);
+    $keys = \keywordEngine\searchByKeywords($searchKeywords, $orderField);
 
     return $keys;
 }
@@ -93,13 +101,16 @@ function searchIndex($search)
  * @param string[] $keywords List of keywords to search for
  * @return string[] List of entityIds of matching records
  */
-function searchByKeywords($keywords)
+function searchByKeywords($keywords, $orderField = null)
 {
     $ds = new DatastoreClient();
 
     $query = $ds->query();
     $query->kind("keywordIndex");
     $query->keysOnly();
+    if (!is_null($orderField)) {
+        $query->order($orderField, Query::ORDER_DESCENDING);
+    }
     foreach ($keywords as $keyword) {
         $query->filter("list", "=", $keyword);
     }
